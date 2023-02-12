@@ -3,9 +3,10 @@
 var timerEl = document.querySelector("#timer");
 var startBtn = document.querySelector("#start-btn");
 var quizTitle = document.querySelector(".title");
-var introText = document.querySelectorAll(".intro-text");
+var introNeeds = document.querySelectorAll(".intro-needs");
 var secondsLeft = 75;
 var quizArea = document.querySelector(".main-zone");
+var currentQuestion = 0;
 // play game function
 
 var questions = [
@@ -53,20 +54,49 @@ var questions = [
 
 
 // function to change content
-  function quizQuestions() {
-    for (let i=0; i < questions.length; i++) {
-      introText.textContent = "";
-      quizTitle.textContent = questions[i].question;
-      var answerList = document.createElement("ol");
-      quizArea.appendChild(answerList);
-        for (let x=0; x < questions[i].answers.length; x++) {
-        var answersEl = document.createElement("li");
-        answersEl.textContent = questions[i].answers[x];
-        answerList.appendChild(answersEl);
-      }
-    }
-}
 
+
+  function quizQuestions() {
+    for (let j=0; j < introNeeds.length; j++) {
+      introNeeds[j].remove();
+    }
+    startBtn.remove();
+    quizTitle.setAttribute("style", "font-size: 1.5em; text-decoration: none;");
+    quizTitle.textContent = questions[currentQuestion].question;
+    var answerList = document.createElement("ol");
+    answerList.setAttribute("style", "display: flex; flex-flow: column; justify-content: flex-start;")
+    quizArea.appendChild(answerList);
+      for (let x=0; x < questions[currentQuestion].answers.length; x++) {
+      var answersEl = document.createElement("button");
+      answersEl.setAttribute("class", "btn");
+      answersEl.setAttribute("style", "text-align: left; white-space: nowrap; width: fit-content; padding: 3% 5%")
+      answersEl.textContent = questions[currentQuestion].answers[x].text;
+      answerList.appendChild(answersEl);
+      
+    answersEl.addEventListener("click", function() {
+      if (questions[currentQuestion].answers[x].correct === true) {
+        var confirmation = document.createElement("p");
+        confirmation.textContent = "That is correct!";
+        quizArea.appendChild(confirmation);
+        confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
+        currentQuestion++;
+        quizTitle.textContent = questions[currentQuestion].question;
+        answersEl.textContent = questions[currentQuestion].answers[x].text;
+      } else {
+        var confirmation = document.createElement("p");
+        confirmation.textContent = "That is wrong!";
+        secondsLeft -= 10;
+        quizArea.appendChild(confirmation);
+        confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
+        currentQuestion++;
+        return quizQuestions();
+      }
+
+    })
+    } 
+  }
+
+  // checking correct or false mechanism needs to add to current question
 
 function startQuiz() {
   setTime();

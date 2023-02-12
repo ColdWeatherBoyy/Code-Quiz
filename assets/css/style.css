@@ -3,7 +3,7 @@
   --main-light: #e6d3a7;
   --text-dark:  #392f2f;
   --text-light: rgb(191, 191, 191);
-  --button-color: #59a985;
+  --confirmation-color: #52ab83;
 }
 
 html {
@@ -80,12 +80,21 @@ p {
 }
 
 .btn {
-  background-color: var(--button-color);
+  background-color: var(--edges-color);
+  border-radius: 5px;
   color: var(--main-light);
   font-size: 1.25em;
   padding: 2% 4%;
   margin: 5%;
   text-align: center;
+  transition: opacity .25s;
+  transition: box-shadow .25s ease-in-out;
+}
+
+.btn:hover {
+  opacity:75%;
+  box-shadow: 3px 3px 10px 2.5px rgb(63, 63, 63);
+
 }
 
 
