@@ -20,7 +20,7 @@ var questions = [
     ]
   },
   {
-  question: "What does HTML stand for??",
+  question: "What does HTML stand for?",
     answers: [
     {text: "Hypertext Markup Language", correct: true},
     {text: "Hyper Textual Markdown Language", correct: false},
@@ -85,12 +85,14 @@ var questions = [
       } else {
         var confirmation = document.createElement("p");
         confirmation.textContent = "That is wrong!";
-        secondsLeft -= 10;
         quizArea.appendChild(confirmation);
         confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
+        secondsLeft -= 10;
         currentQuestion++;
         return quizQuestions();
       }
+
+      // NEED TO FIX REPLACING ANSWER TEXT. SOLUTION HAS TO DO WITH HOW FOR LOOP WORKS AND HOW TO JUST REPLACE TEXT CONTENT. ELSE SHOWS ORIGINAL ATTEMPT BY RECALLING FUNCTION, BUT BETTER SOLUTION MAY BE FINDING A NEW WAY TO CYCLE THROUGH BUTTONS AND REPLACE TEXT CONTENT
 
     })
     } 
