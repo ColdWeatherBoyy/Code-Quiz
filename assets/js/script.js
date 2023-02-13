@@ -81,7 +81,10 @@ var questions = [
         confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
         currentQuestion++;
         quizTitle.textContent = questions[currentQuestion].question;
-        answersEl.textContent = questions[currentQuestion].answers[x].text;
+        for (let j = 0; j < questions[currentQuestion].answers.length; j++) {
+          answersEl.textContent = questions[currentQuestion].answers[j].text;
+        };
+
       } else {
         var confirmation = document.createElement("p");
         confirmation.textContent = "That is wrong!";
