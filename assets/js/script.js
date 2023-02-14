@@ -108,6 +108,9 @@ function answerValidation(x) {
   } else {
     confirmation.textContent = "That is wrong!";
     secondsLeft -= 10;
+    if (secondsLeft < 0) {
+      secondsLeft = 0;
+    }
   }
   
   currentQuestion++;
@@ -177,20 +180,4 @@ function makeForm() {
   submitBtn.textContent = "Submit now!"
   initialForm.appendChild(submitBtn);
   return [submitBtn, initialSubmit];
-}
-
-window.addEventListener("load", function() {
-  if(window.location.href.endsWith("/index-score.html")) {
-    displayScores();
-  }
-});
-
-function displayScores() {
-  var userScores = JSON.parse(localStorage.getItem("storedScores"));
-  var highscoreList = document.querySelector("#highscore-list");
-  for (let x = 0; x < userScores.length; x++)  {
-    var highscoreEls = document.createElement("li");
-    highscoreEls.textContent = userScores[x].user + ": " + userScores[x].score;
-    highscoreList.appendChild(highscoreEls);
-  }
 }
