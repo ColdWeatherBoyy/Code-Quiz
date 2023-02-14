@@ -1,65 +1,23 @@
-# <Your-Project-Title>
+# Coding Quiz
 
 ## Description
 
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
-
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn?
-
-## Table of Contents (Optional)
-
-If your README is long, add a table of contents to make it easy for users to find what they need.
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Credits](#credits)
-- [License](#license)
+This is a coding quiz I built to practice my skills with JavaScript and Web APIs. It allowed me to practice building a page from scratch utilizing basic HTML and CSS, but mostly relying on leveraging Web APIs for dynamic interactivity and formatting. This was my first major experience in using Web APIs to this extent, and I also gained more practice in logical thinking and effective ways of organizing my code. This also servced as a great platform to try and continue developing my UI mind to design pleasant to look at webpages – though, as focus was primarily on JavaScript and Web APIs, I limited my CSS scope to focus on general positioning and display and only worked to beautify particular elements.
 
 ## Installation
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+No installation necessary.
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
+Just visit the page here [here](https://coldweatherboyy.github.io/Code-Quiz/), click the Start Quiz button, and enjoy!
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative file path, add it to your README using the following syntax:
+Additional questions can be added in a fairly straightforward fashion as desired. Recommended to update total timer time if so.
 
-![alt text](assets/images/screenshot.png)
+You can view the two pages below: 
+![screenshot of homepage](assets/images/MainPage.png)
+![screenshot of homepage](assets/images/HighScorePage.png)
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
-
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
-
-If you followed tutorials, include links to those here as well.
-
-## License
-
-The last section of a high-quality README file is the license. This lets other developers know what they can and cannot do with your project. If you need help choosing a license, refer to [https://choosealicense.com/](https://choosealicense.com/).
-
----
-
-🏆 The previous sections are the bare minimum, and your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
-
-## Badges
-
-![badmath](https://img.shields.io/github/languages/top/nielsenjared/badmath)
-
-Badges aren't necessary, but they demonstrate street cred. Badges let other developers know that you know what you're doing. Check out the badges hosted by [shields.io](https://shields.io/). You may not understand what they all represent now, but you will in time.
-
-## Features
-
-If your project has a lot of features, list them here.
-
-## How to Contribute
-
-If you created an application or package and would like other developers to contribute to it, you can include guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own if you'd prefer.
-
-## Tests
-
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.
+Second eyes, debugging help, and moral support from [Antal Spector-Zabusky](https://gitlab.com/antalsz).

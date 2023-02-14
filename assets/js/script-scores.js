@@ -1,8 +1,11 @@
+// needed variables
 var clearBtn = document.querySelector("#clear-btn");
 var backBtn = document.querySelector("#back-btn");
 
+// call of displayScores function
 displayScores();
 
+// utilizes localstorage to display text on page
 function displayScores() {
   var userScores = JSON.parse(localStorage.getItem("storedScores"));
   var highscoreList = document.querySelector("#highscore-list");
@@ -15,7 +18,10 @@ function displayScores() {
   }
 }
 
+// event listener to clear scores
 clearBtn.addEventListener("click", clearScores);
+
+// event listener to navigate back to quiz
 backBtn.addEventListener("click", function() {
   document.location.href = "./index.html";
 });

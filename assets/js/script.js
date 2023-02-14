@@ -1,4 +1,4 @@
-//needed variables
+//needed global variables defined
 var timerEl = document.querySelector("#timer");
 var startBtn = document.querySelector("#start-btn");
 var quizTitle = document.querySelector(".title");
@@ -7,8 +7,8 @@ var secondsLeft = 40;
 var quizArea = document.querySelector(".main-zone");
 var currentQuestion = 0;
 var timerInterval;
-// play game function
 
+// array of objects (with embedded objects) to store questions and answers
 var questions = [
   {
   question: "Which notation is correct on a CSS sheet when making an ID selector?",
@@ -48,7 +48,7 @@ var questions = [
   },
 ]
 
-// overarching function that contains my whole quiz
+// overarching function that contains the majority of the quiz. Triggered with startBtn.addEventListener
 function startQuiz() {
   setTime();
   removeStarter();
@@ -56,10 +56,10 @@ function startQuiz() {
 }
 
 startBtn.addEventListener("click", startQuiz);
-// starts on button press, button triggers timer and changes content to first question
-// function to start timer
+
+
+// function to start timer, first part of startQuiz (also has end condition)
 function setTime() {
-  // Sets interval in variable
   timerInterval = setInterval(function() {
     secondsLeft--;
     timerEl.textContent = "Timer: " + secondsLeft;
@@ -69,40 +69,58 @@ function setTime() {
     }
   }, 1000);
 }
-// function to change content
-// takes away intro page content
+
+// takes away intro page content, second part of startQuiz
 function removeStarter() {
-  for (let z=0; z < introNeeds.length; z++) {
+  for (let z = 0; z < introNeeds.length; z++) {
     introNeeds[z].remove();
   }
   startBtn.remove();
 }
 
-// creates ol list and answers with initial question and answers in proper styling
+// the bulk of startQuiz – creates and styles ol list, lis, and button elements
 function createQuizContent() {  
+  // title styled and updated
   quizTitle.setAttribute("style", "font-size: 1.5em; text-decoration: none;");
   quizTitle.textContent = questions[currentQuestion].question;
+
+  // ol list created and styled
   var answerList = document.createElement("ol");
   answerList.setAttribute("style", "display: flex; flex-flow: column; align-items: center;")
   quizArea.appendChild(answerList);
+
+  // for loop to create and style lis and button elements for each possible answer
   for (let x=0; x < questions[currentQuestion].answers.length; x++) {
+    var answersLi = document.createElement("li");
+
     var answersEl = document.createElement("button");
     answersEl.setAttribute("class", "btn");
-    answersEl.setAttribute("style", "text-align: left; white-space: nowrap; width: fit-content; padding: 5px 10px")
+    answersEl.setAttribute(
+      "style",
+      "text-align: left; width: fit-content; padding: 5px 10px"
+    );
+
     answersEl.textContent = questions[currentQuestion].answers[x].text;
-    answerList.appendChild(answersEl);
+    answersLi.appendChild(answersEl);
+    answerList.appendChild(answersLi);
+
+    // event listener created fpr each button element which triggers answer validation function
     answersEl.addEventListener("click", function() {answerValidation(x)});
   }
+
+  // definition of confirmation outside of answer validation to stop repeat appending
   var confirmation = document.createElement("p");
   quizArea.appendChild(confirmation);
   confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
   confirmation.classList.add('confirmation');
 }
 
+// validation of answer, called by the event listener in line 108
 function answerValidation(x) {
   var confirmation = document.querySelector(".confirmation");
   var answersEls = document.querySelectorAll(".btn");
   
+  // validation of right or wrong
   if (questions[currentQuestion].answers[x].correct) {
     confirmation.textContent = "That is correct!";
   } else {
@@ -113,6 +131,7 @@ function answerValidation(x) {
     }
   }
   
+  // validation if game continues
   currentQuestion++;
   if (currentQuestion >= questions.length || secondsLeft <= 0) {
     return endGame();
@@ -124,6 +143,7 @@ function answerValidation(x) {
   }
 }
 
+// when game extends, this function runs to put initial submission form on page in place of existing content, clear interval, and more
 function endGame() {
   clearInterval(timerInterval);
   timerEl.textContent = "Timer: " + secondsLeft;
@@ -135,49 +155,69 @@ function endGame() {
   }
   confirmation.remove();
 
+  // if else for confirming how game ended and what text to display
   if (secondsLeft > 0) {
-    quizTitle.textContent = "Congratulations! You finished in time with a score of " +secondsLeft +". Please enter your initals below.";
+    quizTitle.textContent = 
+      "Congratulations! You finished in time with a score of " +
+      secondsLeft + 
+      ". Please enter your initals below.";
   } else {
-    quizTitle.textContent = "Better luck next time, but please still enter your initials!";
+    quizTitle.textContent =
+      "Better luck next time, but please still enter your initials!";
   }
 
+  // call of make form function defined below
   var returnedValues = makeForm();
   var submitBtn = returnedValues[0];
   var initialSubmit = returnedValues[1];
+
+  // event listener to submit initials
   submitBtn.addEventListener("click", function(event) {
     event.preventDefault()
+    
     var userScore = {
       user: initialSubmit.value,
       score: secondsLeft 
     }
-    if (JSON.parse(localStorage.getItem("storedScores")) === null) {
-      let userScores = [userScore];
-      localStorage.setItem("storedScores", JSON.stringify(userScores)); 
+
+    if (userScore.user === "") {
+      alert("Where's the initials??");
     } else {
-      let userScores = JSON.parse(localStorage.getItem("storedScores"));
-      userScores.push(userScore);
-      localStorage.setItem("storedScores", JSON.stringify(userScores));
+      // if else using local storage to store user scores in local storage
+      if (JSON.parse(localStorage.getItem("storedScores")) === null) {
+        let userScores = [userScore];
+        localStorage.setItem("storedScores", JSON.stringify(userScores)); 
+      } else {
+        let userScores = JSON.parse(localStorage.getItem("storedScores"));
+        userScores.push(userScore);
+        localStorage.setItem("storedScores", JSON.stringify(userScores));
+      }
+
+      document.location.href = "./index-score.html";
     }
-  });
-  submitBtn.addEventListener("click", function() {
-    document.location.href = "./index-score.html";
   });
 }
 
+// mentioned before, the make form function that creates submission box and submit button
 function makeForm() {
   var initialForm = document.createElement("form");
   initialForm.setAttribute("style", "display: flex; flex-flow: column; align-content: center;")
   quizArea.appendChild(initialForm);
+
   var initialLabel = document.createElement("label");
   initialLabel.setAttribute("for", "initial");
   quizArea.appendChild(initialLabel);
+
   var initialSubmit = document.createElement("input");
   initialSubmit.setAttribute("type", "text");
   initialSubmit.setAttribute("placeholder", "initials please!");
   initialForm.appendChild(initialSubmit);
+
   var submitBtn = document.createElement("button");
   submitBtn.setAttribute("class", "btn");
+  submitBtn.setAttribute("type", "submit");
   submitBtn.textContent = "Submit now!"
   initialForm.appendChild(submitBtn);
+
   return [submitBtn, initialSubmit];
 }
