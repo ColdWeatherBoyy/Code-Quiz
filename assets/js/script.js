@@ -7,6 +7,7 @@ var introNeeds = document.querySelectorAll(".intro-needs");
 var secondsLeft = 75;
 var quizArea = document.querySelector(".main-zone");
 var currentQuestion = 0;
+var allAnswersEl;
 // play game function
 
 var questions = [
@@ -37,8 +38,25 @@ var questions = [
     {text: "It will return an error", correct: false}
    ]
   },
+  {
+  question: "What do you think my favorite color is?",
+    answers: [
+    {text: "Green", correct: false},
+    {text: "Blue", correct: true},
+    {text: "Pink", correct: false},
+    {text: "Purple", correct: false}
+   ]
+  },
 ]
 
+// overaching function that contains my whole quiz
+function startQuiz() {
+  setTime();
+  removeStarter();
+  createQuizContent();
+}
+
+startBtn.addEventListener("click", startQuiz);
 // starts on button press, button triggers timer and changes content to first question
 // function to start timer
   function setTime() {
@@ -51,16 +69,17 @@ var questions = [
       }
     }, 1000);
   }
-
-
 // function to change content
+// takes away intro page content
+function removeStarter() {
+  for (let z=0; z < introNeeds.length; z++) {
+    introNeeds[z].remove();
+  }
+  startBtn.remove();
+}
 
-
-  function quizQuestions() {
-    for (let j=0; j < introNeeds.length; j++) {
-      introNeeds[j].remove();
-    }
-    startBtn.remove();
+// creates ol list and answers with initial question and answers in proper styling
+  function createQuizContent() {  
     quizTitle.setAttribute("style", "font-size: 1.5em; text-decoration: none;");
     quizTitle.textContent = questions[currentQuestion].question;
     var answerList = document.createElement("ol");
@@ -72,42 +91,92 @@ var questions = [
       answersEl.setAttribute("style", "text-align: left; white-space: nowrap; width: fit-content; padding: 3% 5%")
       answersEl.textContent = questions[currentQuestion].answers[x].text;
       answerList.appendChild(answersEl);
-      
-    answersEl.addEventListener("click", function() {
-      if (questions[currentQuestion].answers[x].correct === true) {
-        var confirmation = document.createElement("p");
-        confirmation.textContent = "That is correct!";
-        quizArea.appendChild(confirmation);
-        confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
-        currentQuestion++;
-        quizTitle.textContent = questions[currentQuestion].question;
-        for (let j = 0; j < questions[currentQuestion].answers.length; j++) {
-          answersEl.textContent = questions[currentQuestion].answers[j].text;
-        };
-
-      } else {
-        var confirmation = document.createElement("p");
-        confirmation.textContent = "That is wrong!";
-        quizArea.appendChild(confirmation);
-        confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
-        secondsLeft -= 10;
-        currentQuestion++;
-        return quizQuestions();
-      }
-
-      // NEED TO FIX REPLACING ANSWER TEXT. SOLUTION HAS TO DO WITH HOW FOR LOOP WORKS AND HOW TO JUST REPLACE TEXT CONTENT. ELSE SHOWS ORIGINAL ATTEMPT BY RECALLING FUNCTION, BUT BETTER SOLUTION MAY BE FINDING A NEW WAY TO CYCLE THROUGH BUTTONS AND REPLACE TEXT CONTENT
-
-    })
-    } 
+      answersEl.addEventListener("click", function() {answerValidation(x)});
+    }
   }
 
+  function answerValidation(x) {
+    var confirmation = document.createElement("p");
+    confirmation.textContent = "";
+    quizArea.appendChild(confirmation);
+    confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
+    confirmation.classList.add('confirmation');
+    var answersEls = document.querySelectorAll(".btn");
+    if (questions[currentQuestion].answers[x].correct === true) {
+      confirmation.textContent = "That is correct!";
+      currentQuestion++;
+      if (currentQuestion >= questions.length || secondsLeft <= 0) {
+        return endGame();
+      } else {
+      quizTitle.textContent = questions[currentQuestion].question;
+      for (let z=0; z < questions[currentQuestion].answers.length; z++) {
+        answersEls[z].textContent = questions[currentQuestion].answers[z].text;
+      }
+    }
+    } else {
+      confirmation.textContent = "That is wrong!";
+      quizArea.appendChild(confirmation);
+      secondsLeft -= 10;
+      currentQuestion++;
+      if (currentQuestion >= questions.length || secondsLeft <= 0) {
+        return endGame();
+      } else {
+      quizTitle.textContent = questions[currentQuestion].question;
+      for (let z=0; z < questions[currentQuestion].answers.length; z++) {
+        answersEls[z].textContent = questions[currentQuestion].answers[z].text;
+        }
+      };
+    }
+  };
+
+  function endGame() {
+    var answersEls = document.querySelectorAll(".btn");
+    for (let z = 0; z < answersEls.length; z++) {
+      answersEls[z].remove();
+    }
+    var confirmation = document.querySelector(".confirmation");
+    confirmation.remove();
+    if (secondsLeft > 0) {
+      quizTitle.textContent = "Congratulations! You finished in time with a score of " +secondsLeft +". Please enter your initals below."
+    }
+    var initialForm = document.createElement("form");
+    initialForm.setAttribute("style", "display: flex; flex-flow: column; align-content: center;")
+    quizArea.appendChild(initialForm);
+    var initialLabel = document.createElement("label");
+    initialLabel.setAttribute("for", "initial");
+    quizArea.appendChild(initialLabel);
+    var initialSubmit = document.createElement("input");
+    initialSubmit.setAttribute("type", "text");
+    initialSubmit.setAttribute("placeholder", "initials please!");
+    initialForm.appendChild(initialSubmit);
+    var submitBtn = document.createElement("button");
+    submitBtn.setAttribute("class", "btn");
+    submitBtn.textContent = "Submit now!"
+    initialForm.appendChild(submitBtn);
+   
+    submitBtn.addEventListener("click", function(event) {
+      event.preventDefault()
+      var userScore = {
+        user: initialSubmit.value,
+        score: secondsLeft 
+      }
+      if (JSON.parse(localStorage.getItem("storedScores")) === null) {
+        localStorage.setItem("storedScores", JSON.stringify(userScore)); 
+      } else {
+        let userScores = Array.from(JSON.parse(localStorage.getItem("storedScores")));
+        userScores.push(userScore);
+        localStorage.setItem("storedScores", JSON.stringify(storedScores));
+      }
+    });
+  }
   // checking correct or false mechanism needs to add to current question
 
-function startQuiz() {
-  setTime();
-  quizQuestions();
-}
-startBtn.addEventListener("click", startQuiz);
+ 
+  
+
+    // NEED TO FIX REPLACING ANSWER TEXT. SOLUTION HAS TO DO WITH HOW FOR LOOP WORKS AND HOW TO JUST REPLACE TEXT CONTENT. ELSE SHOWS ORIGINAL ATTEMPT BY RECALLING FUNCTION, BUT BETTER SOLUTION MAY BE FINDING A NEW WAY TO CYCLE THROUGH BUTTONS AND REPLACE TEXT CONTENT
+
+  
 
 // answering question triggers right or wrong
 // answering question wrong triggers timer -10
