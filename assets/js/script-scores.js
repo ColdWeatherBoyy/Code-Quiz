@@ -28,4 +28,6 @@ backBtn.addEventListener("click", function() {
 
 function clearScores() {
   localStorage.clear();
+  var highscoreList = document.querySelector("#highscore-list");
+  highscoreList.textContent = ""; 
 }
