@@ -4,16 +4,15 @@ var timerEl = document.querySelector("#timer");
 var startBtn = document.querySelector("#start-btn");
 var quizTitle = document.querySelector(".title");
 var introNeeds = document.querySelectorAll(".intro-needs");
-var secondsLeft = 75;
+var secondsLeft = 40;
 var quizArea = document.querySelector(".main-zone");
 var currentQuestion = 0;
-var allAnswersEl;
 // play game function
 
 var questions = [
   {
   question: "Which notation is correct on a CSS sheet when making an ID selector?",
-    answers: [
+  answers: [
     {text: ".id-selector", correct: false},
     {text: "#id selector", correct: false},
     {text: "id=id-selector", correct: false},
@@ -22,7 +21,7 @@ var questions = [
   },
   {
   question: "What does HTML stand for?",
-    answers: [
+  answers: [
     {text: "Hypertext Markup Language", correct: true},
     {text: "Hyper Textual Markdown Language", correct: false},
     {text: "Hyper Textual Machine Learning", correct: false},
@@ -31,7 +30,7 @@ var questions = [
   },
   {
   question: "What does querySelector select if there are multiple instances of what its looking for?",
-    answers: [
+  answers: [
     {text: "It will work like querySelectorAll and apply to all of the selected elements", correct: true},
     {text: "It will select the first element that matches", correct: false},
     {text: "It will select the last element that matches", correct: false},
@@ -40,7 +39,7 @@ var questions = [
   },
   {
   question: "What do you think my favorite color is?",
-    answers: [
+  answers: [
     {text: "Green", correct: false},
     {text: "Blue", correct: true},
     {text: "Pink", correct: false},
@@ -49,7 +48,7 @@ var questions = [
   },
 ]
 
-// overaching function that contains my whole quiz
+// overarching function that contains my whole quiz
 function startQuiz() {
   setTime();
   removeStarter();
@@ -59,16 +58,16 @@ function startQuiz() {
 startBtn.addEventListener("click", startQuiz);
 // starts on button press, button triggers timer and changes content to first question
 // function to start timer
-  function setTime() {
-    // Sets interval in variable
-    var timerInterval = setInterval(function() {
-      secondsLeft--;
-      timerEl.textContent = "Timer: " + secondsLeft;
-      if(secondsLeft === 0) {
-        clearInterval(timerInterval);
-      }
-    }, 1000);
-  }
+function setTime() {
+  // Sets interval in variable
+  var timerInterval = setInterval(function() {
+    secondsLeft--;
+    timerEl.textContent = "Timer: " + secondsLeft;
+    if(secondsLeft === 0) {
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
 // function to change content
 // takes away intro page content
 function removeStarter() {
@@ -85,7 +84,7 @@ function removeStarter() {
     var answerList = document.createElement("ol");
     answerList.setAttribute("style", "display: flex; flex-flow: column; justify-content: flex-start;")
     quizArea.appendChild(answerList);
-      for (let x=0; x < questions[currentQuestion].answers.length; x++) {
+    for (let x=0; x < questions[currentQuestion].answers.length; x++) {
       var answersEl = document.createElement("button");
       answersEl.setAttribute("class", "btn");
       answersEl.setAttribute("style", "text-align: left; white-space: nowrap; width: fit-content; padding: 3% 5%")
@@ -93,14 +92,14 @@ function removeStarter() {
       answerList.appendChild(answersEl);
       answersEl.addEventListener("click", function() {answerValidation(x)});
     }
-  }
-
-  function answerValidation(x) {
     var confirmation = document.createElement("p");
-    confirmation.textContent = "";
     quizArea.appendChild(confirmation);
     confirmation.setAttribute("style", "color: var(--text-dark); font-size: 1.5em;")
     confirmation.classList.add('confirmation');
+  }
+
+  function answerValidation(x) {
+    var confirmation = document.querySelector(".confirmation");
     var answersEls = document.querySelectorAll(".btn");
     if (questions[currentQuestion].answers[x].correct === true) {
       confirmation.textContent = "That is correct!";
@@ -115,7 +114,6 @@ function removeStarter() {
     }
     } else {
       confirmation.textContent = "That is wrong!";
-      quizArea.appendChild(confirmation);
       secondsLeft -= 10;
       currentQuestion++;
       if (currentQuestion >= questions.length || secondsLeft <= 0) {
