@@ -3,7 +3,7 @@
   --main-light: #e6d3a7;
   --text-dark:  #392f2f;
   --text-light: rgb(191, 191, 191);
-  --confirmation-color: #52ab83;
+  --confirmation-color: #7cab96;
 }
 
 html {
@@ -84,8 +84,8 @@ p {
   border-radius: 5px;
   color: var(--main-light);
   font-size: 1.25em;
-  padding: 2% 4%;
-  margin: 5%;
+  padding: 5px 10px;
+  margin: 10px;
   text-align: center;
   transition: opacity .25s;
   transition: box-shadow .25s ease-in-out;
